@@ -1,0 +1,22 @@
+{
+    "ATLANTIC": "0101",
+    "BERGEN": "0201",
+    "BURLINGTON": "0301",
+    "CAMDEN": "0401",
+    "CAPE MAY": "0501",
+    "CUMBERLAND": "0601",
+    "ESSEX": "0701",
+    "GLOUCESTER": "0801",
+    "HUDSON": "0901",
+    "HUNTERDON": "1001",
+    "MERCER": "1101",
+    "MIDDLESEX": "1201",
+    "MONMOUTH": "1301",
+    "MORRIS": "1401",
+    "PASSAIC": "1601",
+    "SALEM": "1701",
+    "SOMERSET": "1801",
+    "SUSSEX": "1901",
+    "UNION": "2001",
+    "WARREN": "2101"
+}
