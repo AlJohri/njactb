@@ -725,6 +725,11 @@ def search(**kwargs):
         if not meta['has_next']: break
         zero_indexed_page += 1
 
+def search_and_get(**kwargs):
+    for meta, record in search(**kwargs):
+        detailed_record = parse_get(get_inner(record['url']))
+        yield meta, {**record, **detailed_record}
+
 def get(**kwargs):
     response = search_inner(**kwargs)
     meta, records = parse_search(response)
@@ -745,8 +750,11 @@ def parse_get(response):
     doc = lxml.html.fromstring(response.content)
 
     try:
-        sqft = [x for x in doc.cssselect('table td font') if x.text.strip() == "Square Ft:"][0].getparent().getnext().text_content().strip()
+        sqft = int([x for x in doc.cssselect('table td font') if x.text.strip() == "Square Ft:"][0].getparent().getnext().text_content().strip())
     except Exception as e:
+        sqft = None
+
+    if sqft == 0:
         sqft = None
 
     return {
@@ -754,8 +762,16 @@ def parse_get(response):
     }
 
 if __name__ == "__main__":
+    from itertools import islice
+
+    print(f"get single record")
     record = get(county='PASSAIC', district='CLIFTON', location='115 Dumont Ave')
     print(record)
     
-    # for meta, record in search(county='PASSAIC', per_page=10):
-    #     print(meta, record)
+    print(f"get record list")
+    for meta, record in islice(search(county='PASSAIC', per_page=5), 10):
+        print(meta, record)
+
+    print(f"get multiple record details")
+    for meta, record in islice(search_and_get(county='PASSAIC', per_page=5), 10):
+        print(meta, record)

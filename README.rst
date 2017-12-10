@@ -22,10 +22,6 @@ Test
 
     make test
 
-
-Disclaimer
-----------
-
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/njactb.svg
    :target: https://pypi.python.org/pypi/njactb
 .. |License Status| image:: https://img.shields.io/badge/license-MIT-blue.svg
