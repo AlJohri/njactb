@@ -10,6 +10,7 @@ name = "pypi"
 requests = "*"
 lxml = "*"
 cssselect = "*"
+usaddress = "*"
 
 
 [dev-packages]

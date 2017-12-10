@@ -23,7 +23,7 @@ setup(
     url='https://github.com/AlJohri/njactb',
     license='MIT',
     py_modules=['njactb'],
-    install_requires=['requests', 'cssselect', 'lxml'],
+    install_requires=['requests', 'cssselect', 'lxml', 'usaddress'],
     classifiers=[
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.6',

@@ -3,6 +3,7 @@
 import re
 import json
 import requests
+import usaddress
 import lxml.html
 from urllib.parse import urljoin
 
@@ -689,6 +690,9 @@ def search_inner(
 
 def parse_search(response):
 
+    def parse_str(x):
+        return re.sub(r'\s+', ' ', x.strip())
+
     def parse_row(row):
         return {
             'url': urljoin(BASE_URL, row.cssselect('td:nth-child(1) a')[0].get('href')),
@@ -696,7 +700,7 @@ def parse_search(response):
             'block': row.cssselect('td:nth-child(3) font')[0].text,
             'lot': row.cssselect('td:nth-child(4) font')[0].text.replace('\xa0', ''),
             'qualifier': row.cssselect('td:nth-child(5) font')[0].text.replace('\xa0', ''),
-            'location': row.cssselect('td:nth-child(6) font')[0].text,
+            'location': parse_str(row.cssselect('td:nth-child(6) font')[0].text),
             'owner': row.cssselect('td:nth-child(7) font')[0].text,
         }
 
@@ -731,10 +735,23 @@ def search_and_get(**kwargs):
         yield meta, {**record, **detailed_record}
 
 def get(**kwargs):
+    location = kwargs['location']
+
     response = search_inner(**kwargs)
     meta, records = parse_search(response)
+
+    # attempt to filter down the records by AddressNumber using usaddress
+    try:
+        parsed_address, _ = usaddress.tag(location)
+        records = [x for x in records if parsed_address['AddressNumber'] == usaddress.tag(x['location'])[0]['AddressNumber']]
+    except Exception as e:
+        pass
+
+    if len(records) == 0:
+        raise Exception(f"no records found for query: {kwargs}")
+
     if len(records) > 1:
-        raise Exception(f"returned {len(records)} records. expected to get only 1")
+        raise Exception(f"returned {len(records)} records. expected to get only 1. records: {[x['location'] for x in records]}. query: {kwargs}")
     record = records[0]
 
     response = get_inner(record['url'])
@@ -767,7 +784,7 @@ if __name__ == "__main__":
     print(f"get single record")
     record = get(county='PASSAIC', district='CLIFTON', location='115 Dumont Ave')
     print(record)
-    
+
     print(f"get record list")
     for meta, record in islice(search(county='PASSAIC', per_page=5), 10):
         print(meta, record)
