@@ -508,7 +508,7 @@ DISTRICTS = {
         "WANAQUE": "1613",
         "WAYNE": "1614",
         "WEST MILFORD": "1615",
-        "WEST PATERSON": "1616",
+        "WOODLAND PARK": "1616",
         "ALL": "1600"
     },
     "SALEM": {
