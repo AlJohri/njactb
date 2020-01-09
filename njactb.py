@@ -7,7 +7,7 @@ import usaddress
 import lxml.html
 from urllib.parse import urljoin
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 BASE_URL = 'http://tax1.co.monmouth.nj.us/cgi-bin/'
 
